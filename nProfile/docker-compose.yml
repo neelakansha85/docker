@@ -9,17 +9,35 @@ services:
       - 443:443
     volumes:
       - ./data:/data
+      - ./wp-content/themes/pile:/app/wp-content/themes/pile
+      - ./wp-content/themes/pile-child:/app/wp-content/themes/pile-child
+      - ./wp-content/uploads:/app/wp-content/uploads
+      - ./wp-content/plugins:/app/wp-content/plugins
     environment:
-      DB_NAME: wp_nprofile
+      DB_NAME: wordpress
       DB_PASS: root
-      PLUGINS: akismet
+      ACTIVE_THEME: pile-child
+      ACTIVATE_PLUGINS: customify, pixcodes, pixtypes, tinymce-advanced, wpforms-lite
+      ADMIN_EMAIL: neel@nsdesigners.com
+      SITE_TITLE: Neel Shah
+      WP_DEBUG: 'true'
+      WP_DEBUG_LOG: 'true'
   db:
     image: mysql:5.7 # or mariadb
     ports:
-      - 3306:3306
+      - 3307:3306
     volumes:
       - data:/var/lib/mysql
     environment:
+      MYSQL_ROOT_PASSWORD: root
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - db
+    ports:
+      - 8181:80
+    environment:
+      MYSQL_USERNAME: root
       MYSQL_ROOT_PASSWORD: root
 volumes:
   data: {}
