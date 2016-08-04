@@ -199,30 +199,27 @@ fi
 
 # Activating Theme
 # ----------------
-printf "=> Activating theme for main site... "
-sudo -u www-data wp theme activate "$ACTIVE_THEME" --allow-root >/dev/null 2>&1 || \
-    ERROR $LINENO "Failed to activate theme"
-printf "Done!\n"
+if [ "$ACTIVE_THEME" ]; then
+  printf "=> Activating theme for main site... "
+  sudo -u www-data wp theme activate "$ACTIVE_THEME" --allow-root >/dev/null 2>&1 || \
+      ERROR $LINENO "Failed to activate theme"
+  printf "Done!\n"
+fi
 
 
 #  Activating all Plugins installed
 # --------------------------------
-if [ "$ACTIVATE_PLUGINS" == 'true' ]; then
-  printf "=> Activating all plugins installed ... "
-  sudo -u www-data wp plugin activate --all >/dev/null 2>&1 || \
-    ERROR $LINENO "Failed to activate all plugins"
-  printf "Done!\n"
-fi
-
+printf "=> Activating plugins...\n"
 if [ "$ACTIVATE_PLUGINS" ]; then
-  printf "=> Checking plugins...\n"
   while IFS=',' read -ra plugin; do
     for i in "${!plugin[@]}"; do
       plugin_name=$(echo "${plugin[$i]}" | xargs)
-      printf "=> ($((i+1))/${#plugin[@]}) Plugin '%s' not found. Installing...\n" "${plugin_name}"
-      sudo -u www-data wp plugin activate "${plugin_name}"
+      printf "=> ($((i+1))/${#plugin[@]}) Activating plugin '%s'. ...\n" "${plugin_name}"
+      sudo -u www-data wp plugin activate "${plugin_name}" --allow-root
     done
   done <<< "$ACTIVATE_PLUGINS"
+else
+  printf "Skip!\n"
 fi
 
 

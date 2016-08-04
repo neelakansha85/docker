@@ -12,11 +12,11 @@ services:
       - ./wp-content/themes/pile:/app/wp-content/themes/pile
       - ./wp-content/themes/pile-child:/app/wp-content/themes/pile-child
       - ./wp-content/uploads:/app/wp-content/uploads
-      - ./wp-content/plugins:/app/wp-content/plugins
     environment:
       DB_NAME: wordpress
       DB_PASS: root
       ACTIVE_THEME: pile-child
+      PLUGINS: customify, pixcodes, pixtypes, tinymce-advanced, wpforms-lite
       ACTIVATE_PLUGINS: customify, pixcodes, pixtypes, tinymce-advanced, wpforms-lite
       ADMIN_EMAIL: neel@nsdesigners.com
       SITE_TITLE: Neel Shah
